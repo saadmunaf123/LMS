@@ -19,10 +19,10 @@ const Footer = () => {
         <div className="flex-1">
           <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-white">Quick Links</h3>
           <ul className="space-y-2 text-sm">
-            <li><a href="#" className="hover:text-emerald-600 transition">Home</a></li>
-            <li><a href="#" className="hover:text-emerald-600 transition">Courses</a></li>
-            <li><a href="#" className="hover:text-emerald-600 transition">About Us</a></li>
-            <li><a href="#" className="hover:text-emerald-600 transition">Contact</a></li>
+            <li><a href="#" className="hover:text-orange-600 transition">Home</a></li>
+            <li><a href="#" className="hover:text-orange-600 transition">Courses</a></li>
+            <li><a href="#" className="hover:text-orange-600 transition">About Us</a></li>
+            <li><a href="#" className="hover:text-orange-600 transition">Contact</a></li>
           </ul>
         </div>
 
@@ -30,10 +30,10 @@ const Footer = () => {
         <div className="flex-1">
           <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-white">Follow Us</h3>
           <div className="flex gap-4 mb-4">
-            <a href="#" className="hover:text-emerald-600 transition"><Facebook className="w-5 h-5" /></a>
-            <a href="#" className="hover:text-emerald-600 transition"><Twitter className="w-5 h-5" /></a>
-            <a href="#" className="hover:text-emerald-600 transition"><Instagram className="w-5 h-5" /></a>
-            <a href="#" className="hover:text-emerald-600 transition"><Linkedin className="w-5 h-5" /></a>
+            <a href="#" className="hover:text-orange-600 transition"><Facebook className="w-5 h-5" /></a>
+            <a href="#" className="hover:text-orange-600 transition"><Twitter className="w-5 h-5" /></a>
+            <a href="#" className="hover:text-orange-600 transition"><Instagram className="w-5 h-5" /></a>
+            <a href="#" className="hover:text-orange-600 transition"><Linkedin className="w-5 h-5" /></a>
           </div>
           <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-white">Subscribe</h3>
           <form className="flex gap-2">
@@ -42,7 +42,7 @@ const Footer = () => {
               placeholder="Enter your email" 
               className="flex-grow p-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-emerald-500 outline-none text-sm"
             />
-            <button className="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition text-sm">
+            <button className="bg-orange-500 hover:bg-orange-600 dark:bg-orange-600 dark:hover:bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition text-sm">
               Subscribe
             </button>
           </form>
