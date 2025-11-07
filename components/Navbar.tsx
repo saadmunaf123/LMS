@@ -4,7 +4,7 @@ import { Menu, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 const navitem = [
-  { name: 'Home', href: '/home' },
+  { name: 'Home', href: '/' },
   { name: 'My Courses', href: '/mycourses' },
   { name: 'Contact', href: '/contact' },
   { name: 'About Us', href: '/aboutus' },

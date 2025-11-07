@@ -19,10 +19,10 @@ const Footer = () => {
         <div className="flex-1">
           <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-white">Quick Links</h3>
           <ul className="space-y-2 text-sm">
-            <li><a href="#" className="hover:text-orange-600 transition">Home</a></li>
-            <li><a href="#" className="hover:text-orange-600 transition">Courses</a></li>
-            <li><a href="#" className="hover:text-orange-600 transition">About Us</a></li>
-            <li><a href="#" className="hover:text-orange-600 transition">Contact</a></li>
+            <li><a href="/ " className="hover:text-orange-600 transition">Home</a></li>
+            <li><a href="/courses" className="hover:text-orange-600 transition">Courses</a></li>
+            <li><a href="/aboutus" className="hover:text-orange-600 transition">About Us</a></li>
+            <li><a href="/contact" className="hover:text-orange-600 transition">Contact</a></li>
           </ul>
         </div>
 
