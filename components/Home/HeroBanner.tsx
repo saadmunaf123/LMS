@@ -21,7 +21,7 @@ const HeroBanner = () => {
             Unlock Your Potential.
           </h1>
           <h1 className="m-0 text-[clamp(1.6rem,4vw,2.5rem)] leading-tight font-extrabold">
-            Learn On-Demand
+            Learn On-Demand Saad.
           </h1>
           <p className="mt-3 text-[clamp(0.95rem,1.3vw,1.1rem)] text-gray-200">
             Explore courses, track progress, and accelerate your career with expert-led content.
