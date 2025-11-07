@@ -87,6 +87,13 @@
     opacity: 1;
   }
 
+  .signup-button {
+    border-radius: 3rem 0rem 3rem 0rem;
+  }
+
+  .signup-form {
+    border-radius: 4rem 0rem 4rem 0rem;
+  }
 }
 
 

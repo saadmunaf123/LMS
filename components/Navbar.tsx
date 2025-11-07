@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 const navitem = [
   { name: 'Home', href: '/home' },
@@ -12,6 +13,7 @@ const navitem = [
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
+  const router = useRouter();
 
   // Handle scroll detection
   useEffect(() => {
@@ -66,7 +68,8 @@ const Navbar = () => {
             </a>
           ))}
 
-          <button className="bg-orange-500 text-white font-semibold px-4 py-[10px] rounded-md leading-none 
+          <button onClick={() => router.push('/signup')}
+           className="bg-orange-500 text-white font-semibold px-4 py-[10px] rounded-md leading-none 
                              hover:bg-orange-600 dark:bg-orange-600 dark:hover:bg-orange-500 
                              transition-colors duration-200">
             Login / Signup
@@ -88,7 +91,7 @@ const Navbar = () => {
             </a>
           ))}
           <button
-            onClick={() => setIsOpen(false)}
+            onClick={() => router.push('/signup')}
             className="w-full bg-orange-500 text-white font-semibold py-2 rounded-md 
                        hover:bg-orange-600 dark:bg-orange-600 dark:hover:bg-orange-500 
                        transition-colors duration-200"
