@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import EnrollButton from "./enrollButton";
 import StartLearningButton from "./startLearningButton";
 
-export default function EnrollSection({ courseId }) {
+export default function EnrollSection({ courseId } : { courseId: string }) {
 const [loading, setLoading] = useState(true);
 const [enrolled, setEnrolled] = useState(false);
 
