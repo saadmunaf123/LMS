@@ -32,7 +32,8 @@ const CourseCards = () => {
   const scrollRightBottom = () => bottomContainerRef.current?.scrollBy({ left: 300, behavior: 'smooth' });
 
 useEffect(() => {
-  fetch("http://localhost:5000/api/courses/all")
+  // fetch("http://localhost:5000/api/courses/all")
+  fetch("https://lms-backend-9jj7.onrender.com/api/courses/all")
     .then((res) => res.json())
     .then((data) => {
       console.log("Courses fetched:", data);

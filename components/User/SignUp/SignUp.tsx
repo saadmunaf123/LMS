@@ -7,6 +7,11 @@ export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPass, setConfirmPass] = useState("");
+  const API_BASE = "https://lms-backend-9jj7.onrender.com";
+  const url = isLogin
+    ? `${API_BASE}/api/student/login`
+    : `${API_BASE}/api/student/signup`;
+
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -17,8 +22,8 @@ export default function SignUp() {
     }
 
     const url = isLogin
-      ? "http://localhost:5000/api/student/login"
-      : "http://localhost:5000/api/student/signup";
+      ? `${API_BASE}/api/student/login`
+      : `${API_BASE}/api/student/signup`;
 
     const body = isLogin
       ? { email, password }

@@ -11,7 +11,7 @@ export default function EnrollButton({ courseId }: { courseId: string }) {
     }
 
     try {
-      const res = await fetch(`http://localhost:5000/api/student/enroll/${courseId}`, {
+      const res = await fetch(`https://lms-backend-9jj7.onrender.com/api/student/enroll/${courseId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

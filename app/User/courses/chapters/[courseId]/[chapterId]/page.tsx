@@ -33,7 +33,7 @@ export default function WatchChapterPage() {
                 }
 
                 const res = await fetch(
-                    `http://localhost:5000/api/chapters/${courseId}/${chapterId}`,
+                    `https://lms-backend-9jj7.onrender.com/api/chapters/${courseId}/${chapterId}`,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`,

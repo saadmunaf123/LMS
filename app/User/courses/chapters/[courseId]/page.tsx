@@ -30,7 +30,7 @@ export default function CourseChaptersPage() {
         const token = sessionStorage.getItem("token");
 
         const checkRes = await fetch(
-          `http://localhost:5000/api/student/enroll/check/${courseId}`,
+          `https://lms-backend-9jj7.onrender.com/api/student/enroll/check/${courseId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }

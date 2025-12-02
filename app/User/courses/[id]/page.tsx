@@ -28,7 +28,7 @@ export default async function Page({
   let course: Course | null = null;
 
   try {
-    const res = await fetch(`http://localhost:5000/api/courses/${id}`, {
+    const res = await fetch(`https://lms-backend-9jj7.onrender.com/api/courses/${id}`, {
       cache: "no-store",
     });
     if (!res.ok) throw new Error("Failed to fetch");
