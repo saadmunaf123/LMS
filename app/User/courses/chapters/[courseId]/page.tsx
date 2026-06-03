@@ -40,7 +40,7 @@ export default function CourseChaptersPage() {
         setEnrolled(checkData.enrolled);
 
         const res = await fetch(
-          `http://localhost:5000/api/chapters/${courseId}`,
+          `https://lms-backend-9jj7.onrender.com/api/chapters/${courseId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
