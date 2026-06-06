@@ -52,10 +52,14 @@ useEffect(() => {
 
 const filteredCourses = courses.filter((course) => {
   const categoryMatch = 
-  selectedCategories.length === 0 || selectedCategories.includes(course.category);
+  selectedCategories.length === 0 || selectedCategories.some(category => category.toLowerCase() === course.category?.toLowerCase());
 
-  const difficultyMatch = selectedDifficulties.length === 0 ||
-  selectedDifficulties.includes(course.difficulty);
+const difficultyMatch =
+  selectedDifficulties.length === 0 ||
+  selectedDifficulties.some(
+    difficulty =>
+      difficulty.toLowerCase() === course.difficulty?.toLowerCase()
+  );
 
   return categoryMatch && difficultyMatch;
 })
