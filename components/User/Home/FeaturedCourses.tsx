@@ -2,8 +2,52 @@
 import React, { useState } from 'react';
 import { SlidersHorizontal } from 'lucide-react';
 
-const FeaturedCourses = () => {
+interface FeaturedCoursesProps {
+  selectedCategories: string[];
+  setSelectedCategories: React.Dispatch<React.SetStringAction<string[]>>;
+
+  selectedDifficulties: string[];
+  setSelectedDifficulties: React.Dispatch<React.SetStringAction<string[]>>;
+}
+
+const FeaturedCourses = ({selectedCategories, setSelectedCategories, selectedDifficulties, setSelectedDifficulties}: FeaturedCoursesProps) => {
   const [showFilters, setShowFilters] = useState(false);
+
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategories((prev) => {
+      if(prev.includes(category)) {
+        return prev.filter((item) => item !== category);
+      }
+
+      return [...prev, category];
+    });
+  }
+
+  const handleDifficultyChange = (difficulty: string) => {
+    setSelectedDifficulties((prev) => {
+      if(prev.includes(difficulty)) {
+        return prev.filter((item) => item !== difficulty);
+      }
+      return [...prev, difficulty];
+    });
+  }
+
+const categories = [
+  'Web Development',
+  'Data Science',
+  'Artificial Intelligence',
+  'UI/UX',
+  'Machine Learning',
+  'Marketing',
+  'Linux',
+  'Accounts',
+]
+
+const difficulties = [
+  'Beginner',
+  'Intermediate',
+  'Advanced',
+];
 
   return (
     <div>
@@ -27,22 +71,18 @@ const FeaturedCourses = () => {
             Categories
           </h2>
           <div className="flex flex-col gap-2 max-h-[150px] overflow-y-auto pr-1 custom-scrollbar">
-            {[
-              'Web Development',
-              'Data Science',
-              'Artificial Intelligence',
-              'UI/UX Design',
-              'Machine Learning',
-              'Marketing',
-              'Linux',
-              'Accounts',
-            ].map((cat) => (
+            {categories.map((item) => (
               <label
-                key={cat}
+              key={item}
                 className="flex items-center gap-2 text-gray-700 dark:text-gray-300"
               >
-                <input type="checkbox" className="accent-emerald-600" />
-                {cat}
+                <input
+                  type="checkbox"
+                  className="accent-emerald-600"
+                  checked={selectedCategories.includes(item)}
+                  onChange={() => handleCategoryChange(item)}
+                />
+                {item}
               </label>
             ))}
           </div>
@@ -72,12 +112,12 @@ const FeaturedCourses = () => {
             Difficulty
           </h2>
           <div className="flex flex-col gap-2">
-            {['Beginner', 'Intermediate', 'Advanced'].map((level) => (
+            {difficulties.map((level) => (
               <label
                 key={level}
                 className="flex items-center gap-2 text-gray-700 dark:text-gray-300"
               >
-                <input type="checkbox" className="accent-emerald-600" />
+                <input type="checkbox" checked={selectedDifficulties.includes(level)} onChange={() => handleDifficultyChange(level)} className="accent-emerald-600" />
                 {level}
               </label>
             ))}
@@ -112,24 +152,20 @@ const FeaturedCourses = () => {
                 Categories
               </h3>
               <div className="grid grid-cols-2 gap-2 max-h-[130px] overflow-y-auto custom-scrollbar">
-                {[
-                  'Web Dev',
-                  'Data Sci',
-                  'AI',
-                  'UI/UX',
-                  'ML',
-                  'Marketing',
-                  'Linux',
-                  'Accounts',
-                ].map((cat) => (
-                  <label
-                    key={cat}
-                    className="flex items-center gap-2 text-gray-700 dark:text-gray-300 text-sm"
-                  >
-                    <input type="checkbox" className="accent-emerald-600" />
-                    {cat}
-                  </label>
-                ))}
+                {categories.map((item) => (
+              <label
+              key={item}
+                className="flex items-center gap-2 text-gray-700 dark:text-gray-300 text-sm"
+              >
+                <input
+                  type="checkbox"
+                  className="accent-emerald-600"
+                  checked={selectedCategories.includes(item)}
+                  onChange={() => handleCategoryChange(item)}
+                />
+                {item}
+              </label>
+            ))}
               </div>
             </div>
 
@@ -157,12 +193,12 @@ const FeaturedCourses = () => {
                 Difficulty
               </h3>
               <div className="flex flex-wrap gap-3">
-                {['Beginner', 'Intermediate', 'Advanced'].map((level) => (
+                {difficulties.map((level) => (
                   <label
                     key={level}
                     className="flex items-center gap-2 text-gray-700 dark:text-gray-300 text-sm"
                   >
-                    <input type="checkbox" className="accent-emerald-600" />
+                    <input type="checkbox" checked={selectedDifficulties.includes(level)} onChange={()=>handleDifficultyChange(level)} className="accent-emerald-600" />
                     {level}
                   </label>
                 ))}

@@ -19,7 +19,12 @@ interface Course {
   difficulty: string;
 }
 
-const CourseCards = () => {
+interface CourseCardsProps {
+  selectedCategories: string[];
+  selectedDifficulties: string[];
+}
+
+const CourseCards = ({ selectedCategories, selectedDifficulties}: CourseCardsProps) => {
   const [courses, setCourses] = useState<Course[]>([]);
 
   const topContainerRef = useRef<HTMLDivElement>(null);
@@ -44,6 +49,16 @@ useEffect(() => {
       setCourses([]);
     });
 }, []);
+
+const filteredCourses = courses.filter((course) => {
+  const categoryMatch = 
+  selectedCategories.length === 0 || selectedCategories.includes(course.category);
+
+  const difficultyMatch = selectedDifficulties.length === 0 ||
+  selectedDifficulties.includes(course.difficulty);
+
+  return categoryMatch && difficultyMatch;
+})
 
 
   return (
@@ -132,12 +147,12 @@ useEffect(() => {
           <ChevronRight className="w-5 h-5 text-gray-800 dark:text-white" />
         </button>
 
-        {/* Scrollable Cards */}
+        {/* Filtered Cards */}
         <div
           ref={bottomContainerRef}
           className="flex gap-5 overflow-x-auto scroll-smooth hide-scrollbar pb-3 snap-x snap-mandatory relative z-10"
         >
-          {courses.map((course) => (
+          {filteredCourses.map((course) => (
             <div
               key={course._id}
               className="group bg-white dark:bg-gray-800 rounded-4xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden snap-center flex-shrink-0 w-[260px] h-[230px] flex flex-col"

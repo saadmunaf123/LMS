@@ -16,7 +16,7 @@ export default function Home() {
 
         {/* Home Section */}
         <section className="w-full">
-          <HomeSection />
+          <HomeSection/>
         </section>
       </main>
     </div>
