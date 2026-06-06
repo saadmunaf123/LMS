@@ -4,10 +4,10 @@ import { SlidersHorizontal } from 'lucide-react';
 
 interface FeaturedCoursesProps {
   selectedCategories: string[];
-  setSelectedCategories: React.Dispatch<React.SetStringAction<string[]>>;
+  setSelectedCategories: React.Dispatch<React.SetStateAction<string[]>>;
 
   selectedDifficulties: string[];
-  setSelectedDifficulties: React.Dispatch<React.SetStringAction<string[]>>;
+  setSelectedDifficulties: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 const FeaturedCourses = ({selectedCategories, setSelectedCategories, selectedDifficulties, setSelectedDifficulties}: FeaturedCoursesProps) => {
