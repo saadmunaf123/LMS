@@ -8,9 +8,15 @@ interface FeaturedCoursesProps {
 
   selectedDifficulties: string[];
   setSelectedDifficulties: React.Dispatch<React.SetStateAction<string[]>>;
+
+  selectedRatings: number[];
+  setSelectedRatings: React.Dispatch<React.SetStateAction<number[]>>;
+
+  searchTerm: string;
+  setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const FeaturedCourses = ({selectedCategories, setSelectedCategories, selectedDifficulties, setSelectedDifficulties}: FeaturedCoursesProps) => {
+const FeaturedCourses = ({selectedCategories, setSelectedCategories, selectedDifficulties, setSelectedDifficulties, selectedRatings, setSelectedRatings, searchTerm, setSearchTerm}: FeaturedCoursesProps) => {
   const [showFilters, setShowFilters] = useState(false);
 
   const handleCategoryChange = (category: string) => {
@@ -32,6 +38,15 @@ const FeaturedCourses = ({selectedCategories, setSelectedCategories, selectedDif
     });
   }
 
+  const handleRatingChange = (rating: number) => {
+  setSelectedRatings((prev) => {
+    if (prev.includes(rating)) {
+      return prev.filter((item) => item !== rating);
+    }
+    return [...prev, rating];
+  });
+};
+
 const categories = [
   'Web Development',
   'Data Science',
@@ -49,6 +64,8 @@ const difficulties = [
   'Advanced',
 ];
 
+const ratings = [1, 2, 3, 4];
+
   return (
     <div>
       {/* 🖥️ Large Devices — Original Vertical Sidebar */}
@@ -61,6 +78,8 @@ const difficulties = [
           <input
             type="text"
             placeholder="Search courses..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-orange-500 outline-none"
           />
         </div>
@@ -94,12 +113,17 @@ const difficulties = [
             Ratings
           </h2>
           <div className="flex flex-col gap-2">
-            {[5, 4, 3].map((rating) => (
+            {ratings.map((rating) => (
               <label
                 key={rating}
                 className="flex items-center gap-2 text-gray-700 dark:text-gray-300"
               >
-                <input type="checkbox" className="accent-emerald-600" />
+                <input 
+                  type="checkbox"  
+                  className="accent-emerald-600" 
+                  checked={selectedRatings.includes(rating)}
+                  onChange={() => handleRatingChange(rating)}
+                />
                 {rating} Stars & Up
               </label>
             ))}
@@ -132,6 +156,8 @@ const difficulties = [
           <input
             type="text"
             placeholder="Search courses..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
             className="flex-grow min-w-[200px] p-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-orange-500 outline-none"
           />
           <button
@@ -175,12 +201,17 @@ const difficulties = [
                 Ratings
               </h3>
               <div className="flex flex-wrap gap-3">
-                {[5, 4, 3].map((rating) => (
+                {ratings.map((rating) => (
                   <label
                     key={rating}
                     className="flex items-center gap-2 text-gray-700 dark:text-gray-300 text-sm"
                   >
-                    <input type="checkbox" className="accent-emerald-600" />
+                    <input 
+                      type="checkbox" 
+                      className="accent-emerald-600" 
+                      checked={selectedRatings.includes(rating)}
+                      onChange={() => handleRatingChange(rating)}
+                    />
                     {rating}★ & Up
                   </label>
                 ))}

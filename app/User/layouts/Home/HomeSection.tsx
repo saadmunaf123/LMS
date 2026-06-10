@@ -7,6 +7,8 @@ import { useState } from 'react';
 const HomeSection = () => {
   const [selectedCategories, setSelectedCategories] = useState<string[]> ([]);
   const [selectedDifficulties, setSelectedDifficulties] = useState<string[]>([]);
+  const [selectedRatings, setSelectedRatings] = useState<number[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
 
   return (
     <section className="w-full py-10 bg-gray-50 dark:bg-slate-950 transition-colors duration-300 overflow-x-hidden">
@@ -32,6 +34,10 @@ const HomeSection = () => {
               setSelectedCategories = {setSelectedCategories}
               selectedDifficulties = {selectedDifficulties}
               setSelectedDifficulties = {setSelectedDifficulties}
+              selectedRatings = {selectedRatings}
+              setSelectedRatings = {setSelectedRatings}
+              searchTerm = {searchTerm}
+              setSearchTerm = {setSearchTerm}
             />
           </aside>
 
@@ -40,6 +46,8 @@ const HomeSection = () => {
             <CourseCards 
               selectedCategories = {selectedCategories}
               selectedDifficulties = {selectedDifficulties}
+              selectedRatings = {selectedRatings}
+              searchTerm = {searchTerm}
             />
           </main>
         </div>

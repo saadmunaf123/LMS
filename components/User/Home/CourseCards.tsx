@@ -22,9 +22,11 @@ interface Course {
 interface CourseCardsProps {
   selectedCategories: string[];
   selectedDifficulties: string[];
+  selectedRatings: number[];
+  searchTerm: string;
 }
 
-const CourseCards = ({ selectedCategories, selectedDifficulties}: CourseCardsProps) => {
+const CourseCards = ({ selectedCategories, selectedDifficulties, selectedRatings, searchTerm }: CourseCardsProps) => {
   const [courses, setCourses] = useState<Course[]>([]);
 
   const topContainerRef = useRef<HTMLDivElement>(null);
@@ -54,23 +56,97 @@ const filteredCourses = courses.filter((course) => {
   const categoryMatch = 
   selectedCategories.length === 0 || selectedCategories.some(category => category.toLowerCase() === course.category?.toLowerCase());
 
-const difficultyMatch =
-  selectedDifficulties.length === 0 ||
-  selectedDifficulties.some(
-    difficulty =>
-      difficulty.toLowerCase() === course.difficulty?.toLowerCase()
+  const difficultyMatch =
+    selectedDifficulties.length === 0 ||
+    selectedDifficulties.some(
+      difficulty =>
+        difficulty.toLowerCase() === course.difficulty?.toLowerCase()
+    );
+
+  const ratingMatch = 
+    selectedRatings.length === 0 ||
+    selectedRatings.some
+    (rating => 
+      course.rating >= rating
   );
 
-  return categoryMatch && difficultyMatch;
+  const searchMatch = 
+    searchTerm.trim() === '' ||
+    course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    course.provider?.name.toLowerCase().includes(searchTerm.toLowerCase());
+
+  return categoryMatch && difficultyMatch && ratingMatch && searchMatch;
 })
 
 
   return (
     <section className="container py-10 relative space-y-16">
-      {/* TOP SECTION */}
+
+      {/* BOTTOM SECTION */}
       <div className="max-w-6xl mx-auto px-4 relative">
         <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-6 text-gray-800 dark:text-white">
-          Popular Courses
+          Courses
+        </h2>
+
+        {/* Scroll Buttons */}
+        <button
+          onClick={scrollLeftBottom}
+          className="hidden sm:flex absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-white dark:bg-gray-800 p-2 rounded-full shadow-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+        >
+          <ChevronLeft className="w-5 h-5 text-gray-800 dark:text-white" />
+        </button>
+
+        <button
+          onClick={scrollRightBottom}
+          className="hidden sm:flex absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-white dark:bg-gray-800 p-2 rounded-full shadow-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+        >
+          <ChevronRight className="w-5 h-5 text-gray-800 dark:text-white" />
+        </button>
+
+        {/* Filtered Cards */}
+        <div
+          ref={bottomContainerRef}
+          className="flex gap-5 overflow-x-auto scroll-smooth hide-scrollbar pb-3 snap-x snap-mandatory relative z-10"
+        >
+          {filteredCourses.map((course) => (
+            <div
+              key={course._id}
+              className="group bg-white dark:bg-gray-800 rounded-4xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden snap-center flex-shrink-0 w-[260px] h-[230px] flex flex-col"
+            >
+              <div className="relative w-full h-[60%] overflow-hidden">
+                <Image
+                  src={`data:image/jpeg;base64,${course.image}`}
+                  alt={course.title}
+                  fill
+                  className="object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"
+                />
+              </div>
+              <div className="p-3 flex flex-col justify-between h-[40%]">
+                <div>
+                  <h3 className="text-sm sm:text-base font-semibold text-gray-800 dark:text-white mb-1 truncate">
+                    {course.title}
+                  </h3>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                    By {course.provider?.name}
+                  </p>
+                </div>
+                <div className="flex items-center gap-1 text-yellow-500 mt-1">
+                  <Star className="w-4 h-4 fill-current" />
+                  <span className="text-gray-800 dark:text-gray-200 text-sm">
+                    {course.rating}
+                  </span>
+                </div>
+              </div>
+            </div>
+          ))}
+          <div className="flex-shrink-0 w-4"></div>
+        </div>
+      </div>
+
+            {/* TOP SECTION */}
+      <div className="max-w-6xl mx-auto px-4 relative">
+        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-6 text-gray-800 dark:text-white">
+          All Courses
         </h2>
 
         {/* Scroll Buttons */}
@@ -130,66 +206,6 @@ const difficultyMatch =
         </div>
       </div>
 
-      {/* BOTTOM SECTION */}
-      <div className="max-w-6xl mx-auto px-4 relative">
-        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-6 text-gray-800 dark:text-white">
-          Filtered Courses
-        </h2>
-
-        {/* Scroll Buttons */}
-        <button
-          onClick={scrollLeftBottom}
-          className="hidden sm:flex absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-white dark:bg-gray-800 p-2 rounded-full shadow-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition"
-        >
-          <ChevronLeft className="w-5 h-5 text-gray-800 dark:text-white" />
-        </button>
-
-        <button
-          onClick={scrollRightBottom}
-          className="hidden sm:flex absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-white dark:bg-gray-800 p-2 rounded-full shadow-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition"
-        >
-          <ChevronRight className="w-5 h-5 text-gray-800 dark:text-white" />
-        </button>
-
-        {/* Filtered Cards */}
-        <div
-          ref={bottomContainerRef}
-          className="flex gap-5 overflow-x-auto scroll-smooth hide-scrollbar pb-3 snap-x snap-mandatory relative z-10"
-        >
-          {filteredCourses.map((course) => (
-            <div
-              key={course._id}
-              className="group bg-white dark:bg-gray-800 rounded-4xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden snap-center flex-shrink-0 w-[260px] h-[230px] flex flex-col"
-            >
-              <div className="relative w-full h-[60%] overflow-hidden">
-                <Image
-                  src={`data:image/jpeg;base64,${course.image}`}
-                  alt={course.title}
-                  fill
-                  className="object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"
-                />
-              </div>
-              <div className="p-3 flex flex-col justify-between h-[40%]">
-                <div>
-                  <h3 className="text-sm sm:text-base font-semibold text-gray-800 dark:text-white mb-1 truncate">
-                    {course.title}
-                  </h3>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
-                    By {course.provider?.name}
-                  </p>
-                </div>
-                <div className="flex items-center gap-1 text-yellow-500 mt-1">
-                  <Star className="w-4 h-4 fill-current" />
-                  <span className="text-gray-800 dark:text-gray-200 text-sm">
-                    {course.rating}
-                  </span>
-                </div>
-              </div>
-            </div>
-          ))}
-          <div className="flex-shrink-0 w-4"></div>
-        </div>
-      </div>
     </section>
   );
 };
