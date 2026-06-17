@@ -19,7 +19,7 @@ export default async function Page({ params }: { params: { id: string } | Promis
   let course: Course | null = null;
 
   try {
-    const res = await fetch(`http://localhost:5000/api/courses/${id}`, { cache: "no-store" });
+    const res = await fetch(`https://lms-backend-9jj7.onrender.com/api/courses/${id}`, { cache: "no-store" });
     if (!res.ok) throw new Error("Failed to fetch");
     course = await res.json();
   } catch (err) {

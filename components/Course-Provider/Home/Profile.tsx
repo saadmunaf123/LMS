@@ -1,7 +1,12 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
+import { useEffect, useState } from "react";
+import {
+  User,
+  Mail,
+  LogOut,
+  ShieldCheck,
+} from "lucide-react";
 
 interface Provider {
   _id: string;
@@ -9,100 +14,64 @@ interface Provider {
   email: string;
 }
 
-const Profile = () => {
+export default function Profile() {
   const [provider, setProvider] = useState<Provider | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    const token = sessionStorage.getItem("provider_token");
 
-    const token = sessionStorage.getItem('provider_token');
-    if (!token) {
-      setError('Provider token not found. Please log in.');
-      setLoading(false);
-      return;
-    }
-
-    fetch('http://localhost:5000/api/provider/me', {
+    fetch("https://lms-backend-9jj7.onrender.com/api/provider/me", {
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
       },
     })
-      .then(async (res) => {
-        if (!res.ok) {
-          const text = await res.text();
-          console.error('Response body:', text);
-          throw new Error('Failed to fetch provider info');
-        }
-        return res.json();
-      })
-      .then((data) => {
-        setProvider(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error(err);
-        setError('Failed to load profile.');
-        setLoading(false);
-      });
+      .then((res) => res.json())
+      .then(setProvider)
+      .catch(console.error);
   }, []);
 
   const handleLogout = () => {
-    sessionStorage.removeItem('provider_token');
-    window.location.href = '/CourseProvider/signup'; // redirect to login
+    sessionStorage.removeItem("provider_token");
+    window.location.href = "/CourseProvider/signup";
   };
 
-  if (loading)
-    return (
-      <div className="text-center py-20 text-gray-700 dark:text-gray-300 text-lg">
-        Loading profile...
-      </div>
-    );
-
-  if (error)
-    return (
-      <div className="text-center py-20 text-red-500 text-lg">{error}</div>
-    );
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 dark:from-gray-800 dark:to-gray-700 flex flex-col items-center justify-center px-4 py-16">
-      <div className="bg-white dark:bg-gray-800 shadow-2xl rounded-3xl p-8 sm:p-12 max-w-sm w-full text-center border border-gray-200 dark:border-gray-700">
-        <Image
-          src="https://i.pravatar.cc/150?img=32"
-          alt="Profile Image"
-          width={140}
-          height={140}
-          className="rounded-full shadow-lg mb-6"
-        />
+    <div className="w-[340px]">
 
-        <h2 className="text-2xl sm:text-3xl font-bold text-blue-700 dark:text-blue-400">
+      <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 p-8 sticky top-24">
+
+        <div className="flex justify-center mb-6">
+          <div className="w-28 h-28 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 flex items-center justify-center">
+            <User className="w-14 h-14 text-white" />
+          </div>
+        </div>
+
+        <h2 className="text-center text-2xl font-bold dark:text-white">
           {provider?.name}
         </h2>
-        <p className="text-gray-500 dark:text-gray-300 text-sm mt-1">
+
+        <div className="flex items-center justify-center gap-2 mt-3 text-slate-500">
+          <Mail className="w-4 h-4" />
           {provider?.email}
-        </p>
-        <p className="text-gray-600 dark:text-gray-400 text-sm mt-1">
-          Course Provider
-        </p>
-
-        <div className="mt-8 space-y-4">
-          <button className="w-full bg-teal-600 text-white font-semibold py-3 rounded-xl hover:bg-teal-700
-                       dark:bg-teal-500 dark:hover:bg-teal-600 transition-colors duration-200">
-            Edit Profile
-          </button>
-
-          <button
-            onClick={handleLogout}
-            className="w-full bg-red-100 dark:bg-red-700 text-red-600 dark:text-red-200 py-3 rounded-xl font-semibold hover:bg-red-200 dark:hover:bg-red-600 transition-all shadow-md"
-          >
-            Logout
-          </button>
         </div>
+
+        <div className="mt-6 flex items-center justify-center gap-2 text-green-600 font-semibold">
+          <ShieldCheck className="w-5 h-5" />
+          Verified Provider
+        </div>
+
+        <button
+          onClick={handleLogout}
+          className="w-full mt-8 bg-red-500 hover:bg-red-600 text-white py-3 rounded-2xl font-semibold transition"
+        >
+          <div className="flex items-center justify-center gap-2">
+            <LogOut className="w-5 h-5" />
+            Logout
+          </div>
+        </button>
+
       </div>
+
     </div>
   );
-};
-
-export default Profile;
+}

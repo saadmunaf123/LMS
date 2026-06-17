@@ -4,6 +4,8 @@ import { useState } from "react";
 
 export default function ProviderAuth() {
   const [isLogin, setIsLogin] = useState(true);
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState<"success" | "error" | "">("");
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -16,13 +18,14 @@ export default function ProviderAuth() {
 
     // Validate confirm password only for signup
     if (!isLogin && form.password !== form.confirm) {
-      alert("Passwords do not match");
+      setMessage("Passwords do not match");
+      setMessageType("error");
       return;
     }
 
     const url = isLogin
-      ? "http://localhost:5000/api/provider/login"
-      : "http://localhost:5000/api/provider/signup";
+      ? "https://lms-backend-9jj7.onrender.com/api/provider/login"
+      : "https://lms-backend-9jj7.onrender.com/api/provider/signup";
 
     const body = isLogin
       ? { email: form.email, password: form.password }
@@ -38,7 +41,8 @@ export default function ProviderAuth() {
       const data = await res.json();
 
       if (!res.ok) {
-        alert(data.error || "Something went wrong");
+        setMessage(data.error || "Something went wrong");
+        setMessageType("error");
         return;
       }
 
@@ -49,20 +53,36 @@ export default function ProviderAuth() {
         // Sync navbar
         window.dispatchEvent(new Event("storage"));
 
-        alert("Login successful");
+        setMessage("Login successful");
+        setMessageType("success");
         window.location.href = "/CourseProvider/providerhome";
       } else {
-        alert("Signup successful, please login!");
+        setMessage("Signup successful, please login!");
+        setMessageType("success");
         setIsLogin(true);
       }
     } catch (err) {
       console.log(err);
-      alert("Server error");
+      setMessage("Server error");
+      setMessageType("error");
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-slate-900 px-4">
+    <>
+          {/* Mobile View */}
+      <div className="lg:hidden flex min-h-screen items-center justify-center bg-gray-50 dark:bg-slate-900 px-4">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-4">
+            Mobile View Not Supported
+          </h1>
+          <p className="text-gray-600 dark:text-gray-300">
+            This page is not optimized for mobile devices. Please use a larger device to access this page.
+          </p>
+        </div>
+      </div>
+    {/* Desktop View */}
+    <div className="hidden lg:flex min-h-screen flex items-center justify-center bg-gray-50 dark:bg-slate-900 px-4">
       <div className="bg-white dark:bg-slate-800 shadow-lg w-full max-w-md p-8 rounded-lg">
         
         {/* Title */}
@@ -110,6 +130,12 @@ export default function ProviderAuth() {
             />
           )}
 
+                  {/* Message */}
+        {message && (
+          <div className={`mb-4 p-2 rounded-md ${messageType === "success" ? "bg-green-200 text-green-800" : "bg-red-200 text-red-800"}`}>
+            {message}
+          </div>
+        )}
           <button
             type="submit"
             className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition">
@@ -129,5 +155,6 @@ export default function ProviderAuth() {
         </p>
       </div>
     </div>
+    </>
   );
 }
