@@ -6,6 +6,7 @@ import Link from 'next/link';
 import {
   Star,
   Edit,
+  Trash2,
   BookOpen,
   Search,
   GraduationCap,
@@ -38,10 +39,14 @@ export default function Courses() {
   const [search, setSearch] = useState('');
   const [difficultyFilter, setDifficultyFilter] = useState('All');
 
+  const [deleteCourseId, setDeleteCourseId] = useState<string | null>(null);
+  const [message, setMessage] = useState('');
+  const [messageType, setMessageType] = useState<'success' | 'error' | ''>('');
+
   useEffect(() => {
     const token = sessionStorage.getItem('provider_token');
 
-    fetch('https://lms-backend-9jj7.onrender.com/api/courses/my-courses', {
+    fetch('http://lms-backend-9jj7.onrender.com/api/courses/my-courses', {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -101,6 +106,53 @@ export default function Courses() {
     }
   };
 
+  const handleDeleteCourse = async (courseId: string) => {
+    try {
+      const token = sessionStorage.getItem('provider_token');
+
+      const response = await fetch(
+        `http://lms-backend-9jj7.onrender.com/api/courses/delete/${courseId}`,
+        {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to delete course');
+      }
+
+      setCourses((prev) =>
+        prev.filter((course) => course._id !== courseId)
+      );
+
+      setDeleteCourseId(null);
+
+      setMessage('Course deleted successfully');
+      setMessageType('success');
+
+      setTimeout(() => {
+        setMessage('');
+        setMessageType('');
+      }, 3000);
+
+    } catch (error) {
+      console.error(error);
+
+      setMessage('Failed to delete course');
+      setMessageType('error');
+
+      setTimeout(() => {
+        setMessage('');
+        setMessageType('');
+      }, 3000);
+    }
+  };
+
   return (
     <div>
       <Navbar />
@@ -118,6 +170,19 @@ export default function Courses() {
               Manage, update and monitor all your published courses.
             </p>
           </div>
+
+          {message && (
+            <div className="fixed top-5 left-1/2 -translate-x-1/2 z-50 animate-bounce">
+              <div
+                className={`min-w-[300px] text-center px-6 py-4 rounded-xl shadow-2xl font-medium ${messageType === 'success'
+                  ? 'bg-green-600 text-white'
+                  : 'bg-red-600 text-white'
+                  }`}
+              >
+                {message}
+              </div>
+            </div>
+          )}
 
           {/* STATS */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-5 mb-10">
@@ -301,7 +366,7 @@ export default function Courses() {
                         </span>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-3">
+                      <div className="grid grid-cols-3 gap-3">
 
                         <Link
                           href={`/CourseProvider/coursechapters/${course._id}`}
@@ -321,25 +386,39 @@ export default function Courses() {
 
                         <Link
                           href={`/CourseProvider/courses/update/${course._id}`}
-                          className="
-                          text-center
-                          py-3
-                          rounded-xl
-                          bg-blue-600
-                          hover:bg-blue-700
-                          text-white
-                          font-medium
-                          transition
-                          flex
-                          items-center
-                          justify-center
-                          gap-2
-                        "
-                        >
+                          className=" text-center py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-medium transition flex items-center justify-center gap-2">
                           <Edit className="w-4 h-4" />
                           Update
                         </Link>
+                        <button
+                          onClick={() => setDeleteCourseId(course._id)}
+                          className="py-3 rounded-xl bg-red-600 hover:bg-red-700 text-white font-medium transition flex items-center justify-center gap-2">
+                          <Trash2 className="w-4 h-4" />
+                          Delete
+                        </button>
                       </div>
+                      {deleteCourseId === course._id && (
+                        <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-4">
+                          <p className="text-sm text-red-700 mb-3">
+                            Delete this course permanently?
+                          </p>
+
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => handleDeleteCourse(course._id)}
+                              className="flex-1 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700"
+                            >
+                              Yes, Delete
+                            </button>
+
+                            <button
+                              onClick={() => setDeleteCourseId(null)}
+                              className="flex-1 py-2 rounded-lg border border-slate-300 bg-white text-slate-900 hover:bg-slate-100 dark:bg-slate-800 dark:text-white dark:border-slate-600 dark:hover:bg-slate-700 transition">
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 ))}

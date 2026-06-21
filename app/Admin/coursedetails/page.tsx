@@ -16,7 +16,7 @@ export default function CourseDetails({ params }: { params: { id: string } }) {
   const [course, setCourse] = useState<Course | null>(null);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/courses/${id}`)
+    fetch(`http://lms-backend-9jj7.onrender.com/api/courses/${id}`)
       .then((res) => res.json())
       .then((data) => setCourse(data));
   }, [id]);

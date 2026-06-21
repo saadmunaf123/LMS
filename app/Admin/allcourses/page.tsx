@@ -1,9 +1,16 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { FiBook, FiUser, FiStar } from "react-icons/fi";
+import {
+  FiBook,
+  FiUser,
+  FiStar,
+  FiTrash2,
+  FiSearch,
+} from "react-icons/fi";
+import AdminNavbar from "@/components/Admin/Navbar";
 
-// PROVIDER IS POPULATED → { name, email }
 interface ProviderInfo {
   name: string;
   email: string;
@@ -12,106 +19,327 @@ interface ProviderInfo {
 interface Course {
   _id: string;
   title: string;
-  provider: ProviderInfo;   // UPDATED & CORRECT
+  provider: ProviderInfo;
   image?: string;
   rating: number;
 }
 
 export default function CourseTablePage() {
   const [courses, setCourses] = useState<Course[]>([]);
+  const [search, setSearch] = useState("");
+
+  const [deleteCourseId, setDeleteCourseId] = useState<string | null>(
+    null
+  );
+
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState<
+    "success" | "error" | ""
+  >("");
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/courses/all")
+    fetch("http://lms-backend-9jj7.onrender.com/api/courses/all")
       .then((res) => res.json())
       .then((data: Course[]) => setCourses(data))
       .catch(console.error);
   }, []);
 
+  const handleDeleteCourse = async (courseId: string) => {
+    try {
+      const token = sessionStorage.getItem("adminToken");
+
+      const response = await fetch(
+        `http://lms-backend-9jj7.onrender.com/api/courses/delete/${courseId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error);
+      }
+
+      setCourses((prev) =>
+        prev.filter((course) => course._id !== courseId)
+      );
+
+      setDeleteCourseId(null);
+
+      setMessage("Course deleted successfully");
+      setMessageType("success");
+
+      setTimeout(() => {
+        setMessage("");
+        setMessageType("");
+      }, 3000);
+    } catch (error) {
+      console.error(error);
+
+      setMessage("Failed to delete course");
+      setMessageType("error");
+
+      setTimeout(() => {
+        setMessage("");
+        setMessageType("");
+      }, 3000);
+    }
+  };
+
+  const filteredCourses = courses.filter(
+    (course) =>
+      course.title
+        .toLowerCase()
+        .includes(search.toLowerCase()) ||
+      course.provider?.name
+        ?.toLowerCase()
+        .includes(search.toLowerCase())
+  );
+
   return (
-    <div className="min-h-screen p-8 bg-gray-50 dark:bg-gray-900">
-      <h1 className="text-3xl font-bold mb-6 text-gray-800 dark:text-white">
-        All Courses
-      </h1>
+    <>
+      <AdminNavbar />
 
-      <div className="overflow-x-auto">
-        <table className="min-w-full border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800">
-          <thead>
-            <tr className="bg-gray-100 dark:bg-gray-700">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-950 pt-24 px-8 pb-8">
 
-              {/* TITLE */}
-              <th className="px-6 py-3 text-left text-gray-800 dark:text-gray-200 font-semibold">
-                <div className="flex items-center gap-1">
-                  <FiBook /> Title
-                </div>
-              </th>
+        {/* TOAST */}
+        {message && (
+          <div className="fixed top-5 left-1/2 -translate-x-1/2 z-50">
+            <div
+              className={`px-6 py-4 rounded-xl shadow-2xl font-medium animate-in fade-in slide-in-from-top-2 ${
+                messageType === "success"
+                  ? "bg-green-600 text-white"
+                  : "bg-red-600 text-white"
+              }`}
+            >
+              {message}
+            </div>
+          </div>
+        )}
 
-              {/* PROVIDER */}
-              <th className="px-6 py-3 text-left text-gray-800 dark:text-gray-200 font-semibold">
-                <div className="flex items-center gap-1">
-                  <FiUser /> Provider
-                </div>
-              </th>
+        <div className="max-w-7xl mx-auto">
 
-              {/* IMAGE */}
-              <th className="px-6 py-3 text-left text-gray-800 dark:text-gray-200 font-semibold">
-                Image
-              </th>
+          {/* HEADER */}
+          <div className="mb-8">
+            <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
+              Course Management
+            </h1>
 
-              {/* RATING */}
-              <th className="px-6 py-3 text-left text-gray-800 dark:text-gray-200 font-semibold">
-                <div className="flex items-center gap-1">
-                  <FiStar /> Rating
-                </div>
-              </th>
-            </tr>
-          </thead>
+            <p className="text-gray-500 mt-2">
+              View and manage all courses uploaded by providers.
+            </p>
+          </div>
 
-          <tbody>
-            {courses.map((course, index) => (
-              <tr
-                key={course._id}
-                className={
-                  index % 2 === 0
-                    ? "bg-white dark:bg-gray-800"
-                    : "bg-gray-50 dark:bg-gray-700"
-                }
-              >
-                {/* TITLE */}
-                <td className="px-6 py-4 text-gray-800 dark:text-gray-200">
-                  {course.title}
-                </td>
+          {/* STATS + SEARCH */}
+          <div className="grid md:grid-cols-2 gap-6 mb-8">
 
-                {/* PROVIDER NAME */}
-                <td className="px-6 py-4 text-gray-700 dark:text-gray-300">
-                  {course.provider?.name || "Unknown"}
-                </td>
+            {/* TOTAL COURSES */}
+            <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-lg p-6 border border-gray-200 dark:border-gray-800">
+              <p className="text-gray-500">
+                Total Courses
+              </p>
 
-                {/* IMAGE */}
-                <td className="px-6 py-4 flex items-center">
-                  {course.image ? (
-                    <Image
-                      src={`data:image/jpeg;base64,${course.image}`}
-                      alt={course.title}
-                      width={100}
-                      height={60}
-                      className="object-cover rounded"
-                    />
+              <h2 className="text-4xl font-bold text-blue-600 mt-2">
+                {courses.length}
+              </h2>
+            </div>
+
+            {/* SEARCH */}
+            <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-lg p-6 border border-gray-200 dark:border-gray-800">
+              <div className="relative">
+                <FiSearch className="absolute left-4 top-4 text-gray-400" />
+
+                <input
+                  type="text"
+                  placeholder="Search course or provider..."
+                  value={search}
+                  onChange={(e) =>
+                    setSearch(e.target.value)
+                  }
+                  className="
+                    w-full
+                    pl-11
+                    pr-4
+                    py-3
+                    rounded-xl
+                    border
+                    border-gray-300
+                    dark:border-gray-700
+                    dark:bg-gray-800
+                    dark:text-white
+                    outline-none
+                    focus:ring-2
+                    focus:ring-blue-500
+                  "
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* TABLE */}
+          <div className="overflow-hidden rounded-2xl shadow-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800">
+
+            <div className="overflow-x-auto">
+              <table className="w-full">
+
+                <thead>
+                  <tr className="bg-gray-100 dark:bg-gray-800">
+
+                    <th className="px-6 py-4 text-left">
+                      <div className="flex items-center gap-2">
+                        <FiBook />
+                        Course
+                      </div>
+                    </th>
+
+                    <th className="px-6 py-4 text-left">
+                      <div className="flex items-center gap-2">
+                        <FiUser />
+                        Provider
+                      </div>
+                    </th>
+
+                    <th className="px-6 py-4 text-left">
+                      Thumbnail
+                    </th>
+
+                    <th className="px-6 py-4 text-left">
+                      <div className="flex items-center gap-2">
+                        <FiStar />
+                        Rating
+                      </div>
+                    </th>
+
+                    <th className="px-6 py-4 text-left">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {filteredCourses.length > 0 ? (
+                    filteredCourses.map((course) => (
+                      <tr
+                        key={course._id}
+                        className="
+                          border-t
+                          border-gray-200
+                          dark:border-gray-800
+                          hover:bg-blue-50
+                          dark:hover:bg-gray-800
+                          transition
+                        "
+                      >
+                        {/* TITLE */}
+                        <td className="px-6 py-5">
+                          <div className="font-semibold text-gray-900 dark:text-white">
+                            {course.title}
+                          </div>
+                        </td>
+
+                        {/* PROVIDER */}
+                        <td className="px-6 py-5">
+                          <div className="font-medium text-gray-900 dark:text-white">
+                            {course.provider?.name}
+                          </div>
+
+                          <div className="text-sm text-gray-500">
+                            {course.provider?.email}
+                          </div>
+                        </td>
+
+                        {/* IMAGE */}
+                        <td className="px-6 py-5">
+                          {course.image ? (
+                            <Image
+                              src={`data:image/jpeg;base64,${course.image}`}
+                              alt={course.title}
+                              width={120}
+                              height={70}
+                              className="rounded-lg object-cover shadow"
+                            />
+                          ) : (
+                            <div className="w-[120px] h-[70px] rounded-lg bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-sm text-gray-500">
+                              No Image
+                            </div>
+                          )}
+                        </td>
+
+                        {/* RATING */}
+                        <td className="px-6 py-5">
+                          <span className="px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 font-semibold">
+                            ⭐ {course.rating}
+                          </span>
+                        </td>
+
+                        {/* ACTIONS */}
+                        <td className="px-6 py-5">
+                          {deleteCourseId === course._id ? (
+                            <div className="flex gap-2 flex-wrap">
+
+                              <button
+                                onClick={() =>
+                                  handleDeleteCourse(course._id)
+                                }
+                                className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition"
+                              >
+                                Yes, Delete
+                              </button>
+
+                              <button
+                                onClick={() =>
+                                  setDeleteCourseId(null)
+                                }
+                                className="px-4 py-2 rounded-lg bg-slate-300 text-slate-900 hover:bg-slate-400 transition"
+                              >
+                                Cancel
+                              </button>
+
+                            </div>
+                          ) : (
+                            <button
+                              onClick={() =>
+                                setDeleteCourseId(course._id)
+                              }
+                              className="
+                                flex items-center gap-2
+                                px-4 py-2
+                                rounded-lg
+                                bg-red-100
+                                text-red-600
+                                hover:bg-red-200
+                                transition
+                              "
+                            >
+                              <FiTrash2 />
+                              Delete
+                            </button>
+                          )}
+                        </td>
+                      </tr>
+                    ))
                   ) : (
-                    <div className="w-24 h-14 bg-gray-100 dark:bg-gray-600 flex items-center justify-center text-sm text-gray-500 dark:text-gray-300 rounded">
-                      No Image
-                    </div>
+                    <tr>
+                      <td
+                        colSpan={5}
+                        className="py-12 text-center text-gray-500"
+                      >
+                        No courses found.
+                      </td>
+                    </tr>
                   )}
-                </td>
+                </tbody>
 
-                {/* RATING */}
-                <td className="px-6 py-4 text-gray-700 dark:text-gray-300 font-semibold">
-                  {course.rating}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+              </table>
+            </div>
+          </div>
+
+        </div>
       </div>
-    </div>
+    </>
   );
 }

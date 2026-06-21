@@ -11,8 +11,8 @@ export default function AdminAuthPage() {
     e.preventDefault();
 
     const url = isLogin
-      ? "http://localhost:5000/api/admin/login"
-      : "http://localhost:5000/api/admin/signup";
+      ? "http://lms-backend-9jj7.onrender.com/api/admin/login"
+      : "http://lms-backend-9jj7.onrender.com/api/admin/signup";
 
     const body = isLogin
       ? { email, password }
