@@ -38,7 +38,7 @@ export default function CourseTablePage() {
   >("");
 
   useEffect(() => {
-    fetch("http://lms-backend-9jj7.onrender.com/api/courses/all")
+    fetch("https://lms-backend-9jj7.onrender.com/api/courses/all")
       .then((res) => res.json())
       .then((data: Course[]) => setCourses(data))
       .catch(console.error);
@@ -49,7 +49,7 @@ export default function CourseTablePage() {
       const token = sessionStorage.getItem("adminToken");
 
       const response = await fetch(
-        `http://lms-backend-9jj7.onrender.com/api/courses/delete/${courseId}`,
+        `https://lms-backend-9jj7.onrender.com/api/courses/delete/${courseId}`,
         {
           method: "DELETE",
           headers: {

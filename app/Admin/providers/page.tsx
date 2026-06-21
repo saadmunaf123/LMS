@@ -32,7 +32,7 @@ export default function ProviderListPage() {
   >("");
 
   useEffect(() => {
-    fetch("http://lms-backend-9jj7.onrender.com/api/provider/all")
+    fetch("https://lms-backend-9jj7.onrender.com/api/provider/all")
       .then((res) => res.json())
       .then((data) => setProviders(data.providers))
       .catch((err) => console.log(err));
@@ -41,7 +41,7 @@ export default function ProviderListPage() {
   const handleDelete = async (id: string) => {
     try {
       const res = await fetch(
-        `http://lms-backend-9jj7.onrender.com/api/provider/delete/${id}`,
+        `https://lms-backend-9jj7.onrender.com/api/provider/delete/${id}`,
         {
           method: "DELETE",
         }

@@ -9,7 +9,7 @@ export default function AddSamplePage() {
 
   const handleAdd = async () => {
     try {
-      const res = await axios.post("http://lms-backend-9jj7.onrender.com/api/samples/add", {
+      const res = await axios.post("https://lms-backend-9jj7.onrender.com/api/samples/add", {
         name,
         email,
         password,

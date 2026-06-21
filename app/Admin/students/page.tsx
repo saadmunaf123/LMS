@@ -22,7 +22,7 @@ export default function StudentListPage() {
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    fetch("http://lms-backend-9jj7.onrender.com/api/student/all")
+    fetch("https://lms-backend-9jj7.onrender.com/api/student/all")
       .then((res) => res.json())
       .then((data) => setStudents(data.students))
       .catch((err) => console.log(err));

@@ -14,7 +14,7 @@ const TablePage: React.FC = () => {
 
     // Fetch all users
     const fetchData = () => {
-        axios.get("http://lms-backend-9jj7.onrender.com/api/samples/all")
+        axios.get("https://lms-backend-9jj7.onrender.com/api/samples/all")
             .then(res => setData(res.data))
             .catch(err => console.error(err));
     };
@@ -25,7 +25,7 @@ const TablePage: React.FC = () => {
 
     // ✅ Delete user
     const deleteUser = (id: string) => {
-        axios.delete(`http://lms-backend-9jj7.onrender.com/api/samples/delete/${id}`)
+        axios.delete(`https://lms-backend-9jj7.onrender.com/api/samples/delete/${id}`)
             .then(() => {
                 alert("User deleted");
                 fetchData(); // refresh table

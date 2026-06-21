@@ -32,7 +32,7 @@ export default function AddCourse() {
       formData.append("image", image);
     }
 
-    const res = await fetch("http://lms-backend-9jj7.onrender.com/api/courses/add", {
+    const res = await fetch("https://lms-backend-9jj7.onrender.com/api/courses/add", {
       method: "POST",
       body: formData
       // ❌ Do NOT set Content-Type manually
