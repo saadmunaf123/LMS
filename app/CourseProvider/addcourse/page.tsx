@@ -37,26 +37,14 @@ export default function AddCourse() {
   >('');
 
   const categories = [
-    'Accounts',
-    'Linux',
-    'Machine Learning',
-    'Marketing',
-    'UI/UX',
     'Web Development',
     'Data Science',
-    'Cyber Security',
-    'Cloud Computing',
-    'Blockchain',
-    'DevOps',
-    'Mobile Development',
-    'Game Development',
     'Artificial Intelligence',
-    'Networking',
-    'Database Management',
-    'Software Testing',
-    'Project Management',
-    'Digital Marketing',
-    'Graphic Design',
+    'UI/UX',
+    'Machine Learning',
+    'Marketing',
+    'Linux',
+    'Accounts',
   ];
 
   const handleChange = (
@@ -249,11 +237,10 @@ export default function AddCourse() {
           {/* Alerts */}
           {message && (
             <div
-              className={`mb-8 p-4 rounded-xl flex items-center gap-3 ${
-                messageType === 'success'
+              className={`mb-8 p-4 rounded-xl flex items-center gap-3 ${messageType === 'success'
                   ? 'bg-green-100 text-green-700 border border-green-300'
                   : 'bg-red-100 text-red-700 border border-red-300'
-              }`}
+                }`}
             >
               {messageType === 'success' ? (
                 <CheckCircle size={20} />
@@ -503,7 +490,7 @@ export default function AddCourse() {
             </div>
           </div>
         </div>
-      </div>      
+      </div>
     </div>
   );
 }

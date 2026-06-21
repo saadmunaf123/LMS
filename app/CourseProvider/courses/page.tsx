@@ -46,7 +46,7 @@ export default function Courses() {
   useEffect(() => {
     const token = sessionStorage.getItem('provider_token');
 
-    fetch('http://lms-backend-9jj7.onrender.com/api/courses/my-courses', {
+    fetch('https://lms-backend-9jj7.onrender.com/api/courses/my-courses', {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -111,7 +111,7 @@ export default function Courses() {
       const token = sessionStorage.getItem('provider_token');
 
       const response = await fetch(
-        `http://lms-backend-9jj7.onrender.com/api/courses/delete/${courseId}`,
+        `https://lms-backend-9jj7.onrender.com/api/courses/delete/${courseId}`,
         {
           method: 'DELETE',
           headers: {
