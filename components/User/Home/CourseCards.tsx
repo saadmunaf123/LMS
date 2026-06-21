@@ -86,24 +86,24 @@ const CourseCards = ({ selectedCategories, selectedDifficulties, selectedRatings
     return categoryMatch && difficultyMatch && ratingMatch && searchMatch;
   })
 
-const SkeletonCard = () => {
-  return (
-    <div className="bg-white dark:bg-gray-800 rounded-4xl shadow-md overflow-hidden flex-shrink-0 w-[260px] h-[230px] animate-pulse">
+  const SkeletonCard = () => {
+    return (
+      <div className="bg-white dark:bg-gray-800 rounded-4xl shadow-md overflow-hidden flex-shrink-0 w-[260px] h-[230px] animate-pulse">
 
-      <div className="w-full h-[60%] bg-gray-300 dark:bg-gray-700"></div>
+        <div className="w-full h-[60%] bg-gray-300 dark:bg-gray-700"></div>
 
-      <div className="p-3 h-[40%] flex flex-col justify-between">
-        <div>
-          <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-3/4 mb-2"></div>
-          <div className="h-3 bg-gray-300 dark:bg-gray-700 rounded w-1/2"></div>
+        <div className="p-3 h-[40%] flex flex-col justify-between">
+          <div>
+            <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-3/4 mb-2"></div>
+            <div className="h-3 bg-gray-300 dark:bg-gray-700 rounded w-1/2"></div>
+          </div>
+
+          <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-16"></div>
         </div>
 
-        <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-16"></div>
       </div>
-
-    </div>
-  );
-};
+    );
+  };
 
 
   return (
@@ -150,30 +150,32 @@ const SkeletonCard = () => {
                 key={course._id}
                 className="group bg-white dark:bg-gray-800 rounded-4xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden snap-center flex-shrink-0 w-[260px] h-[230px] flex flex-col"
               >
-                <div className="relative w-full h-[60%] overflow-hidden">
-                  <Image
-                    src={`data:image/jpeg;base64,${course.image}`}
-                    alt={course.title}
-                    fill
-                    className="object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"
-                  />
-                </div>
-                <div className="p-3 flex flex-col justify-between h-[40%]">
-                  <div>
-                    <h3 className="text-sm sm:text-base font-semibold text-gray-800 dark:text-white mb-1 truncate">
-                      {course.title}
-                    </h3>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
-                      By {course.provider?.name}
-                    </p>
+                <Link href={`/User/courses/${course._id}`} className="block w-full h-full">
+                  <div className="relative w-full h-[60%] overflow-hidden">
+                    <Image
+                      src={`data:image/jpeg;base64,${course.image}`}
+                      alt={course.title}
+                      fill
+                      className="object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"
+                    />
                   </div>
-                  <div className="flex items-center gap-1 text-yellow-500 mt-1">
-                    <Star className="w-4 h-4 fill-current" />
-                    <span className="text-gray-800 dark:text-gray-200 text-sm">
-                      {course.rating}
-                    </span>
+                  <div className="p-3 flex flex-col justify-between h-[40%]">
+                    <div>
+                      <h3 className="text-sm sm:text-base font-semibold text-gray-800 dark:text-white mb-1 truncate">
+                        {course.title}
+                      </h3>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                        By {course.provider?.name}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-1 text-yellow-500 mt-1">
+                      <Star className="w-4 h-4 fill-current" />
+                      <span className="text-gray-800 dark:text-gray-200 text-sm">
+                        {course.rating}
+                      </span>
+                    </div>
                   </div>
-                </div>
+                </Link>
               </div>
             ))}
           <div className="flex-shrink-0 w-4"></div>
