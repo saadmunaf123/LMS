@@ -60,6 +60,9 @@ export default function CourseTablePage() {
 
       const data = await response.json();
 
+      console.log("DELETE STATUS:", response.status);
+      console.log("DELETE RESPONSE:", data);
+
       if (!response.ok) {
         throw new Error(data.error);
       }
@@ -110,11 +113,10 @@ export default function CourseTablePage() {
         {message && (
           <div className="fixed top-5 left-1/2 -translate-x-1/2 z-50">
             <div
-              className={`px-6 py-4 rounded-xl shadow-2xl font-medium animate-in fade-in slide-in-from-top-2 ${
-                messageType === "success"
+              className={`px-6 py-4 rounded-xl shadow-2xl font-medium animate-in fade-in slide-in-from-top-2 ${messageType === "success"
                   ? "bg-green-600 text-white"
                   : "bg-red-600 text-white"
-              }`}
+                }`}
             >
               {message}
             </div>
